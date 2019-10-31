@@ -2058,7 +2058,9 @@ namespace CommomUpper_32Series
         this.bRxByteCnt = (byte) 0;
         this.bTotleBytes = (byte) 0;
         this.bRxFrameFinishFlag = false;
-        this.serialPort1.Write(Data, 0, (int) num15 + 2);
+                string s = "";
+                WriteDataToLog(Data);
+                this.serialPort1.Write(Data, 0, (int) num15 + 2);
         this.serialPort1.DiscardInBuffer();
       }
       catch (Exception ex)
@@ -2074,7 +2076,28 @@ namespace CommomUpper_32Series
       }
     }
 
-    public void FlashUpgrateComplete()
+        public void WriteToLog(string s)
+        {
+            string writePath = @"C:\BMS\hta.txt";
+            using (StreamWriter sw = new StreamWriter(writePath, true, System.Text.Encoding.Default))
+            {
+                sw.WriteLine(s);
+            }
+        }
+
+        public void WriteDataToLog(byte [] Data)
+        {
+            string s = "";
+            foreach (Byte b in Data)
+            {
+                s += b.ToString();
+                s += " ";
+            }
+            WriteToLog("output: " + s);
+
+        }
+
+        public void FlashUpgrateComplete()
     {
       byte[] Data = new byte[50];
       this.CountCnt = 0;
@@ -2137,7 +2160,8 @@ namespace CommomUpper_32Series
         this.bRxByteCnt = (byte) 0;
         this.bTotleBytes = (byte) 0;
         this.bRxFrameFinishFlag = false;
-        this.serialPort1.Write(Data, 0, (int) num15 + 2);
+                WriteDataToLog(Data);
+                this.serialPort1.Write(Data, 0, (int) num15 + 2);
         this.serialPort1.DiscardInBuffer();
       }
       catch (Exception ex)
@@ -2209,7 +2233,8 @@ namespace CommomUpper_32Series
           this.bRxByteCnt = (byte) 0;
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
-          this.serialPort1.Write(Data, 0, num12 + 2);
+                    WriteDataToLog(Data);
+                    this.serialPort1.Write(Data, 0, num12 + 2);
           this.serialPort1.DiscardInBuffer();
           this.length += this.m;
           this.progressBar_upgrate.Value = 100;
@@ -2241,7 +2266,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, num12 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
           this.length += 1024;
           this.ProgressBar_n = (float) this.length / (float) this.len;
           this.ProgressBar_n *= 100f;
@@ -3016,7 +3042,14 @@ namespace CommomUpper_32Series
 
     private void RxRdRunInfoAck(byte[] bydata)
     {
-      int i = 3;
+            string s = "";
+            foreach (Byte b in bydata)
+            {
+                s += b.ToString();
+                s += " ";
+            }
+            WriteToLog("bydata in RxRdRunInfoAck: " + s);
+            int i = 3;
       int temp;
       switch (this.u16Rs485RegAddr)
       {
@@ -3181,6 +3214,7 @@ namespace CommomUpper_32Series
             this.label_VC32.Text = "NA";
           else
             this.label_VC32.Invoke((MethodInvoker) (() => this.label_VC32.Text = Convert.ToDouble((float) temp).ToString("0")));
+                    MessageBox.Show(((int)bydata[i+1] * 256 + (int)bydata[i+1]).ToString(), "Title");
           this.label_Vcell_max.Invoke((MethodInvoker) (() => this.label_Vcell_max.Text = Convert.ToDouble((float) ((int) bydata[i++] * 256 + (int) bydata[i++])).ToString("0")));
           this.label_Vcell_min.Invoke((MethodInvoker) (() => this.label_Vcell_min.Text = Convert.ToDouble((float) ((int) bydata[i++] * 256 + (int) bydata[i++])).ToString("0")));
           this.label_Max_pos.Invoke((MethodInvoker) (() => this.label_Max_pos.Text = Convert.ToDouble((float) ((int) bydata[i++] * 256 + (int) bydata[i++])).ToString("0")));
@@ -4459,7 +4493,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, 8);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
           ++this.u16RdRunInfoTxCnt;
           if (this.bIsEng == (byte) 0)
           {
@@ -4503,7 +4538,9 @@ namespace CommomUpper_32Series
     {
       try
       {
+        
         int bytesToRead = this.serialPort1.BytesToRead;
+        
         byte[] buffer = new byte[bytesToRead];
         int num1 = this.serialPort1.Read(buffer, 0, bytesToRead);
         for (int index = 0; index < num1; ++index)
@@ -4590,6 +4627,7 @@ namespace CommomUpper_32Series
           {
             switch ((byte) ((uint) this.bRxDataBuff[1] & (uint) byte.MaxValue))
             {
+              
               case 3:
               case 131:
                 if (this.timer1.Enabled)
@@ -4670,7 +4708,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, 8);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -4729,7 +4768,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, 8);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -4788,7 +4828,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, 8);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -4967,7 +5008,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, 8);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -5026,7 +5068,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, 8);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -6389,7 +6432,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -6504,7 +6548,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -6619,7 +6664,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -6734,7 +6780,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -6849,7 +6896,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -6963,7 +7011,8 @@ namespace CommomUpper_32Series
           this.bRxByteCnt = (byte) 0;
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
-          this.serialPort1.Write(Data, 0, (int) num26 + 2);
+          this.serialPort1.Write(Data, 0, (int)num26 + 2);
+                    WriteDataToLog(Data);
           this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
@@ -7079,7 +7128,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -7194,7 +7244,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -7309,7 +7360,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -7424,7 +7476,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -7539,7 +7592,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -7654,7 +7708,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -7769,7 +7824,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -7999,7 +8055,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -8114,7 +8171,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -8229,7 +8287,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -8344,7 +8403,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -8459,7 +8519,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -8574,7 +8635,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -8689,7 +8751,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -8804,7 +8867,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -8919,7 +8983,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -9034,7 +9099,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -9149,7 +9215,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -9264,7 +9331,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -9379,7 +9447,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -9494,7 +9563,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -9609,7 +9679,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -9724,7 +9795,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -9839,7 +9911,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -9954,7 +10027,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -10016,7 +10090,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, 8);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -10076,7 +10151,8 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, 8);
-          this.serialPort1.DiscardInBuffer();
+                    WriteDataToLog(Data);
+                    this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
         {
@@ -10218,6 +10294,7 @@ namespace CommomUpper_32Series
           this.bTotleBytes = (byte) 0;
           this.bRxFrameFinishFlag = false;
           this.serialPort1.Write(Data, 0, (int) num26 + 2);
+
           this.serialPort1.DiscardInBuffer();
         }
         catch (Exception ex)
